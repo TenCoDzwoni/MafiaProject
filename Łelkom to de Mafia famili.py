@@ -1,51 +1,131 @@
-import tkinter as tk
+from tkinter import *
+from tkinter import messagebox
 
-class MafiaApplicationForm:
-    def __init__(self, master):
-        self.master = master
-        self.master.title("Formularz Aplikacyjny do Mafii")
+class Window(Tk):
+    def __init__(self):
+        super().__init__()
+        self.title('Formularz mafia')
+        self.geometry("600x700")
+        self.resizable(0, 0)
 
-        self.label_name = tk.Label(master, text="Imię:")
-        self.entry_name = tk.Entry(master)
+class Przycisk(Button):
+    def __init__(self, name):
+        super().__init__(text=name, padx=50, pady=20, command=self.send)
+    def send(self):
+        plik =open('formularz.txt', 'w')
+        plik.write(f'imie: {imie.get()}\nnzawisko: {nazwisko.get()}\nwiek: {wiek.get()}\nNumer telefonu: {telefon.get()}\nPseudonim: {pseudonim.get()}\nPłeć: {plec.get()}\nPraca: {praca.get()}\nDoświadczenie: {doswiadczenie.get()}\nPrawo jazdy: {PrawoJazdy.prawojazdy}\nOcena filmu: {scroll.get()}\nLubi {lista}\nPodpis: {podpis.get()}')
+        plik.close()
 
-        self.label_age = tk.Label(master, text="Wiek:")
-        self.entry_age = tk.Entry(master)
+class Input(Entry):
+     def __init__(self):
+        super().__init__()
 
-        self.label_experience = tk.Label(master, text="Doświadczenie w mafii:")
-        self.text_experience = tk.Text(master, height=5, width=30)
+class Suwak(Scale):
+     def __init__(self, od, do, orient):
+        super().__init__(to=do, from_=od, orient=orient)
 
-        self.button_submit = tk.Button(master, text="Zatwierdź", command=self.submit_form)
+class Licznik(Spinbox):
+     def __init__(self, od, do):
+        super().__init__(to=do, from_=od)
 
-        
-        self.label_name.grid(row=0, column=0, sticky="e")
-        self.entry_name.grid(row=0, column=1)
+class Napis(Label):
+    def __init__(self, text, rozmiar='10', pady=10):
+        super().__init__(text=text, font=('Arial', rozmiar), pady=pady)
 
-        self.label_age.grid(row=1, column=0, sticky="e")
-        self.entry_age.grid(row=1, column=1)
+class PrawoJazdy(Radiobutton):
+    prawojazdy=''
+    def __init__(self, text, value):
+        self.text=text
+        super().__init__(text=text, value=value, command=self.wybor)
+    def wybor(self):
+        PrawoJazdy.prawojazdy=self.text
 
-        self.label_experience.grid(row=2, column=0, sticky="e")
-        self.text_experience.grid(row=2, column=1)
+class Jedzenie(Checkbutton):
+    def __init__(self, text, var):
+        self.text=text
+        self.var=var
+        super().__init__(text=text, command=sprawdz, variable=self.var)
+def sprawdz():
+    global lista
+    lista=[]
+    for x in [makaron, pizza, oliwki, wino]:
+        if x.var.get()==1:
+            lista.append(x.text)
+okno=Window()  
 
-        self.button_submit.grid(row=3, column=1, pady=10)
+cP=IntVar()
+cO=IntVar()
+cM=IntVar()
+cW=IntVar()
 
-    def submit_form(self):
-        name = self.entry_name.get()
-        age = self.entry_age.get()
-        experience = self.text_experience.get("1.0", tk.END)
 
-        
-        with open("application_data.txt", "a") as file:
-            file.write(f"Imię: {name}\n")
-            file.write(f"Wiek: {age}\n")
-            file.write(f"Doświadczenie w mafii:\n{experience}\n")
-            file.write("=" * 30 + "\n")
+send=Przycisk('Wyślij')
+imie=Input()
+nazwisko=Input()
+doswiadczenie=Input()
+wiek=Licznik(1, 100)
+Header=Napis('Formulattio de la mafio', 25)
+Limie=Napis('Namo')
+Lnazwisko=Napis('Lasto Namo')
+Ldoswiadczenie=Napis("Heva u don' this alredy?")
+Lwiek=Napis('Età')
+telefon=Input()
+Ltelefon=Napis('Numero telefono')
+pseudonim=Input()
+LPseudonim=Napis('Mafia Namo')
+Lpraca=Napis('Where you get money from now?')
+praca=Input()
+Lplec=Napis('R u man or a gal?')
+plec=Input()
+tak=PrawoJazdy('Si', 'T')
+nie=PrawoJazdy('No', 'N')
+LPrawoJazdy=Napis('Do u have a car?')
+Lscroll=Napis('In scalo 1 - 10 how mucho you like "God Fatha"')
+scroll=Suwak(1, 10, 'horizontal')
+Ljedzenie=Napis('U like:')
+makaron=Jedzenie('Pasta', cM)
+pizza=Jedzenie('Pizza', cP)
+oliwki=Jedzenie('Olive', cO)
+wino=Jedzenie('Vino', cW)
+Lbenefity=Napis('Benefito from membership:', pady=3)
+b1=Napis('- Nice suit', pady=2)
+b2=Napis('- Moni $$$', pady=2)
+Lpodpis=Napis('If u R ready to sell ur soul, then sign here')
+podpis=Input()
 
-        
-        self.entry_name.delete(0, tk.END)
-        self.entry_age.delete(0, tk.END)
-        self.text_experience.delete("1.0", tk.END)
+Header.grid(column=1, row=0, columnspan=4)
+Limie.grid(column=1, row=1)
+imie.grid(column=2, row=1)
+Lnazwisko.grid(column=3, row=1)
+nazwisko.grid(column=4, row=1)
+Lwiek.grid(column=1, row=3)
+wiek.grid(column=2, row=3)
+Ltelefon.grid(column=3, row=3)
+telefon.grid(column=4, row=3)
+LPseudonim.grid(column=1, row=4, columnspan=2)
+pseudonim.grid(column=3, row=4)
+Lplec.grid(column=1, row=5)
+plec.grid(column=2, row=5)
+Lpraca.grid(column=3, row=5)
+praca.grid(column=4, row=5)
+Ldoswiadczenie.grid(column=1, row=6, columnspan=2)
+doswiadczenie.grid(column=3, row=6)
+LPrawoJazdy.grid(column=1, row=7, columnspan=2)
+tak.grid(column=3, row=7)
+nie.grid(column=4, row=7)
+Lscroll.grid(column=1, row=8, columnspan=3)
+scroll.grid(column=4, row=8)
+Ljedzenie.grid(column=1, row=11)
+makaron.grid(column=2, row=11)
+pizza.grid(column=2, row=12)
+oliwki.grid(column=2, row=13)
+wino.grid(column=2, row=14)
+Lbenefity.grid(column=1, row=15, columnspan=2)
+b1.grid(column=1, row=16)
+b2.grid(column=1, row=17)
+Lpodpis.grid(column=1, row=18, columnspan=4)
+podpis.grid(column=3, row=19)
+send.grid(column=3, row=20)
 
-if __name__ == "__main__":
-    root = tk.Tk()
-    application_form = MafiaApplicationForm(root)
-    root.mainloop()
+okno.mainloop()
+
